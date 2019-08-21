@@ -32,9 +32,11 @@ namespace WebAppCore.MvcUI
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<DB.Models.ClubContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ClubDatabase")));
+            //services.AddDbContext<DB.Models.ClubContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ClubDatabase")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            DB.Models.ClubContext.ConStr = Configuration.GetConnectionString("ClubDatabase");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

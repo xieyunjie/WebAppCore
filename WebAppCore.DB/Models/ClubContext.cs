@@ -6,6 +6,8 @@ namespace WebAppCore.DB.Models
 {
     public partial class ClubContext : DbContext
     {
+
+        public static string ConStr = "";
         public ClubContext()
         {
         }
@@ -29,10 +31,11 @@ namespace WebAppCore.DB.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Database=Club;Server=.;UID=sa;Password=Abc,123.;");
-            }
+            //if (!optionsBuilder.IsConfigured)
+            //{
+            //    optionsBuilder.UseSqlServer("Database=Club;Server=.;UID=sa;Password=Abc,123.;");
+            //}
+            optionsBuilder.UseSqlServer(ConStr);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
