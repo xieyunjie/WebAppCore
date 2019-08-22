@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppCore.UI", "WebAppCore.UI\WebAppCore.UI.csproj", "{BDDA1430-1D4A-4A58-B46F-A1D264ACC1D0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppCore.DB", "WebAppCore.DB\WebAppCore.DB.csproj", "{061E7DF6-EEB0-4D33-8068-08D21129BD2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppCore.MvcUI", "WebAppCore.MvcUI\WebAppCore.MvcUI.csproj", "{23B0705B-2687-494D-99B8-1212ECE48BC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppCore.MvcUI", "WebAppCore.MvcUI\WebAppCore.MvcUI.csproj", "{23B0705B-2687-494D-99B8-1212ECE48BC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BDDA1430-1D4A-4A58-B46F-A1D264ACC1D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BDDA1430-1D4A-4A58-B46F-A1D264ACC1D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BDDA1430-1D4A-4A58-B46F-A1D264ACC1D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BDDA1430-1D4A-4A58-B46F-A1D264ACC1D0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{061E7DF6-EEB0-4D33-8068-08D21129BD2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{061E7DF6-EEB0-4D33-8068-08D21129BD2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{061E7DF6-EEB0-4D33-8068-08D21129BD2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
