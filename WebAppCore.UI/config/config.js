@@ -70,6 +70,8 @@ if (isAntDesignProPreview) {
 }
 
 export default {
+
+  history:"hash",
   plugins,
   block: {
     // 国内用户可以使用码云
@@ -112,13 +114,13 @@ export default {
               name: 'welcome',
               icon: 'smile',
               component: './Welcome',
-            },            
+            },
             {
               path: '/mailcenter/maillist',
               name: 'mailcenter_maillist',
               icon: 'smile',
               component: './mailcenter/maillist/index',
-            },
+            }, 
             {
               component: './404',
             },
@@ -174,13 +176,16 @@ export default {
   manifest: {
     basePath: '/',
   },
-  chainWebpack: webpackPlugin, 
-  
+  chainWebpack: webpackPlugin,
   proxy: {
-    '/MailCenter/': {
-      target: 'https://localhost:5000',
+    '/MC': {
+      target: 'https://localhost:5001/',
+      secure: false,
       changeOrigin: true,
-      pathRewrite: { '^/MailCenter': '' },
+      withCredentials: true,
+      pathRewrite: {
+        '^/MC': '',
+      },
     },
   },
 };
