@@ -28,5 +28,7 @@ namespace WebAppCore.MvcUI.Controllers
 
             return new JsonResult(list);
         }
+
+
     }
 }

@@ -16,4 +16,6 @@ export default {
   ...settings,
   ...pwa,
   ...component,
+
+  'menu.mailcenter_maillist':'邮件表'
 };
