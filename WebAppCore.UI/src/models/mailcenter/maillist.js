@@ -5,8 +5,8 @@ const model = {
     namespace: 'mailcenter_maillist',
     
     state: {
-        MailList:[]
-
+        MailList:[],
+        editModalVisible: false,  
     }, 
 
     effects: {
