@@ -1,11 +1,11 @@
 import { connect } from 'dva';
 import React, { Component } from 'react';
-import { Table, Divider, Tag, Button} from 'antd';
+import { Table, Divider, Tag, Button, Spin } from 'antd';
 
 import styles from './index.less';
 
 
-const AppFun = function ({ data, dispatch }) {
+const AppFun = function ({ data, loading, dispatch }) {
 
   const columns = [
     {
@@ -49,8 +49,18 @@ const AppFun = function ({ data, dispatch }) {
       )
     }];
 
+  const clickFlash = (e) => {
+   dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
+  };
+
+
+  console.info(loading)
   return (
-    <Table rowKey="id" columns={columns} dataSource={data}></Table>
+    <Spin spinning={loading}>
+      <Button type="primary">添加</Button>
+      <Button type="primary" onClick={clickFlash} >flash</Button>
+      <Table rowKey="id" columns={columns} dataSource={data}></Table>
+    </Spin>
   )
 }
 
@@ -61,7 +71,11 @@ class AppCmp extends Component {
   render = () => AppFun(this.props);
 }
 export default connect(state => {
+  console.info(state.loading);
+
+  
   return {
+    loading: state.loading.models.mailcenter_maillist,
     data: state.mailcenter_maillist.MailList
   };
 })(AppCmp);
