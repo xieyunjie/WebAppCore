@@ -1,11 +1,14 @@
 
 import React, { Component } from 'react';
-import { Table, Divider, Tag, Button, Spin, Modal } from 'antd';
+import { Modal, Form, Input, Button } from 'antd';
 
-const editModal = ({ data, blnVisible, onOK, onCancel }) => {
+const FItem = Form.Item;
+
+const editModal = ({ data, blnVisible, onOK, onCancel, form }) => {
+    const { getFieldDecorator } = form;
     return (
         <Modal
-            title="Basic Modal"
+            title="编辑Modal"
             visible={blnVisible}
             // onOk={this.handleOk}
             // onCancel={this.handleCancel}
@@ -20,9 +23,9 @@ const editModal = ({ data, blnVisible, onOK, onCancel }) => {
             </Button>,
             ]}
         >
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
+            <Form>
+
+            </Form>
         </Modal>
     )
 };
