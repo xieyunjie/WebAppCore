@@ -6,7 +6,9 @@ const model = {
     
     state: {
         MailList:[],
+        CMail:{},
         editModalVisible: false,  
+        
     }, 
 
     effects: {

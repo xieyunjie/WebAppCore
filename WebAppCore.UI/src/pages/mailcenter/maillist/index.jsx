@@ -9,13 +9,16 @@ import styles from './index.less';
 
 const AppFun = function ({ loading, data, editModalVisible, dispatch }) {
 
+  const onEditClick = function (record) {
+    dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: record, editModalVisible: true } });
+  };
   const columns = [
     {
       key: 'opr',
       title: '操作',
       render: (val, record) => (
         <span>
-          <Button type="link" size="small">编辑</Button>
+          <Button type="link" size="small" onClick={onEditClick.bind(null, record)}>编辑</Button>
           <Divider type="vertical" />
           {record.status == true ? (<Button color="blue" size="small">禁用</Button>) : (<Button color="orange" size="small">启用</Button>)}
           <Divider type="vertical" />
@@ -55,7 +58,20 @@ const AppFun = function ({ loading, data, editModalVisible, dispatch }) {
     dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
   };
   const onAdd = e => {
-    dispatch({ type: 'mailcenter_maillist/save', payload: { editModalVisible: true } });
+    const CMail = {
+      id: 0,
+      name: '',
+      displayName: '',
+      subject: '',
+      mailBody: '',
+      isHtml: true,
+      mailSendTypeId: 1,
+      mailSendEndId: 1,
+      status: 1,
+      mailSendEnd: '',
+      mcMailReceiveEnd: []
+    };
+    dispatch({ type: 'mailcenter_maillist/save', payload: { CMail, editModalVisible: true } });
   }
 
   const editProps = {
@@ -63,6 +79,16 @@ const AppFun = function ({ loading, data, editModalVisible, dispatch }) {
     blnVisible: editModalVisible,
     onOK: (e) => {
       console.info("OKOKOK");
+      // const { form } = formRef.props;
+      // form.validateFields((err, values) => {
+      //   if (err) {
+      //     return;
+      //   }
+
+      //   console.log('Received values of form: ', values);
+      //   form.resetFields();
+      //   // dispatch({ type: 'mailcenter_maillist/save', payload: { editModalVisible: false } });
+      // });
       dispatch({ type: 'mailcenter_maillist/save', payload: { editModalVisible: false } });
     },
     onCancel: (e) => {
@@ -71,12 +97,20 @@ const AppFun = function ({ loading, data, editModalVisible, dispatch }) {
     }
   };
 
+  // let formRef = null;
+
+  // const saveFormRef = form => {
+  //   formRef = form;
+  // };
+
   return (
     <Spin spinning={loading}>
       <Button type="primary" onClick={onAdd}>添加</Button>
       <Button type="primary" onClick={clickFlash} >flash</Button>
       <Table rowKey="id" columns={columns} dataSource={data}></Table>
-      <EditModal {...editProps} ></EditModal>
+      <EditModal {...editProps} 
+      // wrappedComponentRef={saveFormRef}
+      ></EditModal>
     </Spin>
   )
 }
