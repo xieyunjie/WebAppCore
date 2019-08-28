@@ -7,7 +7,7 @@ import EditModal from './edit'
 import styles from './index.less';
 
 
-const AppFun = function ({ loading, data, editModalVisible, dispatch }) {
+const AppFun = function ({ loading, data, editModalVisible, emptyMail, dispatch }) {
 
   const onEditClick = function (record) {
     dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: record, editModalVisible: true } });
@@ -20,36 +20,44 @@ const AppFun = function ({ loading, data, editModalVisible, dispatch }) {
         <span>
           <Button type="link" size="small" onClick={onEditClick.bind(null, record)}>编辑</Button>
           <Divider type="vertical" />
-          {record.status == true ? (<Button color="blue" size="small">禁用</Button>) : (<Button color="orange" size="small">启用</Button>)}
+          {record.Status == true ? (<Button color="blue" size="small">禁用</Button>) : (<Button color="orange" size="small">启用</Button>)}
           <Divider type="vertical" />
           <Button type="danger" size="small">删除</Button>
         </span>
       )
     }, {
-      key: 'id',
-      title: 'id',
-      dataIndex: 'id'
+      key: 'Id',
+      title: 'ID',
+      dataIndex: 'Id'
     }, {
-      key: 'name',
+      key: 'Name',
       title: '名称',
-      dataIndex: 'name',
+      dataIndex: 'Name',
     }, {
-      key: 'displayName',
+      key: 'DisplayName',
       title: '显示名称',
-      dataIndex: 'displayName',
+      dataIndex: 'DisplayName',
     }, {
-      key: 'subject',
+      key: 'Subject',
       title: '主题',
-      dataIndex: 'subject',
+      dataIndex: 'Subject',
+    },{
+      key: 'MailSendEnd.Name',
+      title: '发送邮箱',
+      dataIndex: 'MailSendEnd.Name',
     }, {
-      key: 'isHtml',
+      key: 'MailSendType.Name',
+      title: '发送类型',
+      dataIndex: 'MailSendType.Name',
+    }, {
+      key: 'IsHtml',
       title: '',
-      dataIndex: 'isHtml',
+      dataIndex: 'IsHtml',
       render: (val, record) => (
         <span>
           {val == true ? (<Tag color="blue">√ HTML</Tag>) : (<Tag color="red">× HTML</Tag>)}
           <Divider type="vertical" />
-          {record.status == true ? (<Tag color="blue">启用</Tag>) : (<Tag color="orange">禁用</Tag>)}
+          {record.Status == true ? (<Tag color="blue">启用</Tag>) : (<Tag color="orange">禁用</Tag>)}
         </span>
       )
     }];
@@ -58,27 +66,14 @@ const AppFun = function ({ loading, data, editModalVisible, dispatch }) {
     dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
   };
   const onAdd = e => {
-    const CMail = {
-      id: 0,
-      name: '',
-      displayName: '',
-      subject: '',
-      mailBody: '',
-      isHtml: true,
-      mailSendTypeId: 1,
-      mailSendEndId: 1,
-      status: 1,
-      mailSendEnd: '',
-      mcMailReceiveEnd: []
-    };
-    dispatch({ type: 'mailcenter_maillist/save', payload: { CMail, editModalVisible: true } });
+    dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail, editModalVisible: true } });
   }
 
   const editProps = {
     data: null,
     blnVisible: editModalVisible,
     onOK: (e) => {
-      console.info("OKOKOK");
+      // console.info("OKOKOK");
       // const { form } = formRef.props;
       // form.validateFields((err, values) => {
       //   if (err) {
@@ -92,7 +87,7 @@ const AppFun = function ({ loading, data, editModalVisible, dispatch }) {
       dispatch({ type: 'mailcenter_maillist/save', payload: { editModalVisible: false } });
     },
     onCancel: (e) => {
-      console.info("cancelcancel");
+      //console.info("cancelcancel");
       dispatch({ type: 'mailcenter_maillist/save', payload: { editModalVisible: false } });
     }
   };
@@ -107,8 +102,8 @@ const AppFun = function ({ loading, data, editModalVisible, dispatch }) {
     <Spin spinning={loading}>
       <Button type="primary" onClick={onAdd}>添加</Button>
       <Button type="primary" onClick={clickFlash} >flash</Button>
-      <Table rowKey="id" columns={columns} dataSource={data}></Table>
-      <EditModal {...editProps} 
+      <Table rowKey="Id" columns={columns} dataSource={data}></Table>
+      <EditModal {...editProps}
       // wrappedComponentRef={saveFormRef}
       ></EditModal>
     </Spin>
@@ -126,6 +121,7 @@ export default connect(state => {
   return {
     loading: state.loading.models.mailcenter_maillist,
     data: state.mailcenter_maillist.MailList,
+    emptyMail: state.mailcenter_maillist.EmptyMail,
     editModalVisible: state.mailcenter_maillist.editModalVisible,
   };
 })(AppCmp);

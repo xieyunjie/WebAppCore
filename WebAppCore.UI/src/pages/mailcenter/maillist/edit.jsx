@@ -52,8 +52,8 @@ const editModal = ({ data, blnVisible, onOK, onCancel, form }) => {
         >
             <Form {...formItemLayout} onSubmit={handleSubmit}>
                 <FItem label="名称">
-                    {getFieldDecorator("name", {
-                        initialValue: data.name,
+                    {getFieldDecorator("Name", {
+                        initialValue: data.Name,
                         rules: [{
                             required: true,
                             message: '请输入显示名称',
@@ -61,8 +61,8 @@ const editModal = ({ data, blnVisible, onOK, onCancel, form }) => {
                     })(<Input />)}
                 </FItem>
                 <FItem label="显示名称">
-                    {getFieldDecorator("displayName", {
-                        initialValue: data.displayName,
+                    {getFieldDecorator("DisplayName", {
+                        initialValue: data.DisplayName,
                         rules: [{
                             required: true,
                             message: '请输入显示名称',
@@ -70,8 +70,8 @@ const editModal = ({ data, blnVisible, onOK, onCancel, form }) => {
                     })(<Input />)}
                 </FItem>
                 <FItem label="邮件主题">
-                    {getFieldDecorator("subject", {
-                        initialValue: data.subject,
+                    {getFieldDecorator("Subject", {
+                        initialValue: data.Subject,
                         rules: [{
                             required: true,
                             message: '请输入邮件主题',
@@ -79,7 +79,7 @@ const editModal = ({ data, blnVisible, onOK, onCancel, form }) => {
                     })(<Input />)}
                 </FItem>
                 <FItem label="是否Html">
-                    {getFieldDecorator('isHtml', { initialValue: data.isHtml })(
+                    {getFieldDecorator('IsHtml', { initialValue: data.IsHtml })(
                         <Radio.Group>
                             <Radio value={true}>是</Radio>
                             <Radio value={false}>否</Radio>
@@ -87,7 +87,7 @@ const editModal = ({ data, blnVisible, onOK, onCancel, form }) => {
                     )}
                 </FItem>
                 <FItem label="邮件内容">
-                    {getFieldDecorator("mailBody", { initialValue: data.mailBody })(
+                    {getFieldDecorator("MailBody", { initialValue: data.MailBody })(
                         <TextArea autosize={{ minRows: 3, maxRows: 5 }} />
                     )}
 

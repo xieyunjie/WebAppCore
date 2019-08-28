@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebAppCore.DB.Models;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace WebAppCore.MvcUI.Controllers
 {
@@ -24,9 +26,12 @@ namespace WebAppCore.MvcUI.Controllers
 
         public IActionResult List()
         {
-            var list = this._mailCenterContext.McMailList.ToList();
-
-            return new JsonResult(list);
+            var list = this._mailCenterContext.McMailList.Include(x => x.MailSendEnd).Include(x => x.MailSendType);
+            // var list = this._mailCenterContext.McMailList.ToList();
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            // settings.MissingMemberHandling = MissingMemberHandling.Ignore;
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            return new JsonResult(list,settings);
         }
 
 

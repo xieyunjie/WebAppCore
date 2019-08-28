@@ -19,6 +19,7 @@ namespace WebAppCore.DB.Models
         public int Port { get; set; }
         public int Status { get; set; }
 
+        [Newtonsoft.Json.JsonIgnore]
         public virtual ICollection<McMailList> McMailList { get; set; }
     }
 }
