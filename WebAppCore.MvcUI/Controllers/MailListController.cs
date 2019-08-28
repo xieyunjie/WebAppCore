@@ -27,11 +27,12 @@ namespace WebAppCore.MvcUI.Controllers
         public IActionResult List()
         {
             var list = this._mailCenterContext.McMailList.Include(x => x.MailSendEnd).Include(x => x.MailSendType);
-            // var list = this._mailCenterContext.McMailList.ToList();
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            // settings.MissingMemberHandling = MissingMemberHandling.Ignore;
-            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            return new JsonResult(list,settings);
+            //// var list = this._mailCenterContext.McMailList.ToList();
+            //JsonSerializerSettings settings = new JsonSerializerSettings();
+            //// settings.MissingMemberHandling = MissingMemberHandling.Ignore;
+            //settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            //return new JsonResult(list,settings);
+            return new JsonResult(list);
         }
 
 

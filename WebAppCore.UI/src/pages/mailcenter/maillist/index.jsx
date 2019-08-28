@@ -20,44 +20,44 @@ const AppFun = function ({ loading, data, editModalVisible, emptyMail, dispatch 
         <span>
           <Button type="link" size="small" onClick={onEditClick.bind(null, record)}>编辑</Button>
           <Divider type="vertical" />
-          {record.Status == true ? (<Button color="blue" size="small">禁用</Button>) : (<Button color="orange" size="small">启用</Button>)}
+          {record.status == true ? (<Button color="blue" size="small">禁用</Button>) : (<Button color="orange" size="small">启用</Button>)}
           <Divider type="vertical" />
           <Button type="danger" size="small">删除</Button>
         </span>
       )
     }, {
-      key: 'Id',
+      key: 'id',
       title: 'ID',
-      dataIndex: 'Id'
+      dataIndex: 'id'
     }, {
-      key: 'Name',
+      key: 'name',
       title: '名称',
-      dataIndex: 'Name',
+      dataIndex: 'name',
     }, {
-      key: 'DisplayName',
+      key: 'displayName',
       title: '显示名称',
-      dataIndex: 'DisplayName',
+      dataIndex: 'displayName',
     }, {
-      key: 'Subject',
+      key: 'subject',
       title: '主题',
-      dataIndex: 'Subject',
+      dataIndex: 'subject',
     }, {
-      key: 'MailSendEnd.Name',
+      key: 'mailSendEnd.name',
       title: '发送邮箱',
-      dataIndex: 'MailSendEnd.Name',
+      dataIndex: 'mailSendEnd.name',
     }, {
-      key: 'MailSendType.Name',
+      key: 'mailSendType.name',
       title: '发送类型',
-      dataIndex: 'MailSendType.Name',
+      dataIndex: 'mailSendType.name',
     }, {
-      key: 'IsHtml',
+      key: 'isHtml',
       title: '',
-      dataIndex: 'IsHtml',
+      dataIndex: 'isHtml',
       render: (val, record) => (
         <span>
           {val == true ? (<Tag color="blue">√ HTML</Tag>) : (<Tag color="red">× HTML</Tag>)}
           <Divider type="vertical" />
-          {record.Status == true ? (<Tag color="blue">启用</Tag>) : (<Tag color="orange">禁用</Tag>)}
+          {record.status == true ? (<Tag color="blue">启用</Tag>) : (<Tag color="orange">禁用</Tag>)}
         </span>
       )
     }];
@@ -72,23 +72,11 @@ const AppFun = function ({ loading, data, editModalVisible, emptyMail, dispatch 
   const editProps = {
     data: null,
     blnVisible: editModalVisible,
-    onOK: (e) => {
-      // console.info("OKOKOK");
-      // const { form } = formRef.props;
-      // form.validateFields((err, values) => {
-      //   if (err) {
-      //     return;
-      //   }
-
-      //   console.log('Received values of form: ', values);
-      //   form.resetFields();
-      //   // dispatch({ type: 'mailcenter_maillist/save', payload: { editModalVisible: false } });
-      // });
+    onOK: (e) => { 
       dispatch({ type: 'mailcenter_maillist/save', payload: { editModalVisible: false } });
     },
-    onCancel: (e) => {
-      //console.info("cancelcancel");
-      dispatch({ type: 'mailcenter_maillist/save', payload: { editModalVisible: false } });
+    onCancel: (e) => { 
+      dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail, editModalVisible: false } });
     }
   };
 
@@ -102,7 +90,7 @@ const AppFun = function ({ loading, data, editModalVisible, emptyMail, dispatch 
     <Spin spinning={loading}>
       <Button type="primary" onClick={onAdd}>添加</Button>
       <Button type="primary" onClick={clickFlash} >flash</Button>
-      <Table rowKey="Id" columns={columns} dataSource={data}></Table>
+      <Table rowKey="id" columns={columns} dataSource={data}></Table>
       <EditModal {...editProps}
       // wrappedComponentRef={saveFormRef}
       ></EditModal>

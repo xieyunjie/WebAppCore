@@ -9,18 +9,18 @@ const model = {
     CMail: {},
     editModalVisible: false,
     EmptyMail: {
-      Id: 0,
-      Name: '',
-      DisplayName: '',
-      Subject: '',
-      MailBody: '',
-      IsHtml: true,
-      MailSendTypeId: 1,
-      MailSendEndId: 1,
-      Status: 1,
-      MailSendEnd: {},
-      MailSendType: {},
-      McMailReceiveEnd: []
+      id: 0,
+      name: '',
+      displayName: '',
+      subject: '',
+      mailBody: '',
+      isHtml: true,
+      mailSendTypeId: 1,
+      mailSendEndId: 1,
+      status: 1,
+      mailSendEnd: {},
+      mailSendType: {},
+      mcMailReceiveEnd: []
     }
   },
 

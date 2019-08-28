@@ -1,11 +1,12 @@
 import { connect } from 'dva';
 import React, { Component } from 'react';
-import { Modal, Form, Input, Button, Radio } from 'antd';
+import { Modal, Form, Input, Button, Radio, Select } from 'antd';
 
 const FItem = Form.Item;
 const { TextArea } = Input;
+const { Option } = Select;
 
-const editModal = ({ data, blnVisible, onOK, onCancel, form }) => {
+const editModal = ({ data, mailSendTypeList, mailSendEndList, blnVisible, onOK, onCancel, form }) => {
     const { getFieldDecorator } = form;
     const formItemLayout = {
         labelCol: {
@@ -52,8 +53,8 @@ const editModal = ({ data, blnVisible, onOK, onCancel, form }) => {
         >
             <Form {...formItemLayout} onSubmit={handleSubmit}>
                 <FItem label="名称">
-                    {getFieldDecorator("Name", {
-                        initialValue: data.Name,
+                    {getFieldDecorator("name", {
+                        initialValue: data.name,
                         rules: [{
                             required: true,
                             message: '请输入显示名称',
@@ -61,8 +62,8 @@ const editModal = ({ data, blnVisible, onOK, onCancel, form }) => {
                     })(<Input />)}
                 </FItem>
                 <FItem label="显示名称">
-                    {getFieldDecorator("DisplayName", {
-                        initialValue: data.DisplayName,
+                    {getFieldDecorator("displayName", {
+                        initialValue: data.displayName,
                         rules: [{
                             required: true,
                             message: '请输入显示名称',
@@ -70,24 +71,58 @@ const editModal = ({ data, blnVisible, onOK, onCancel, form }) => {
                     })(<Input />)}
                 </FItem>
                 <FItem label="邮件主题">
-                    {getFieldDecorator("Subject", {
-                        initialValue: data.Subject,
+                    {getFieldDecorator("subject", {
+                        initialValue: data.subject,
                         rules: [{
                             required: true,
                             message: '请输入邮件主题',
                         }]
                     })(<Input />)}
                 </FItem>
+                <FItem label="邮件类型">
+                    {getFieldDecorator('mailSendTypeId', {
+                        initialValue: data.mailSendTypeId,
+                        rules: [{
+                            required: true,
+                            message: '请选择邮件类型',
+                        }]
+                    })(
+                        <Select>
+                            {
+                                mailSendTypeList.map((item, idx) => {
+                                    return <Option key={item.id} value={item.id}>{item.name}</Option>
+                                })
+                            }
+                        </Select>
+                    )}
+                </FItem>
+                <FItem label="发送端">
+                    {getFieldDecorator('mailSendTypeId', {
+                        initialValue: data.mailSendTypeId,
+                        rules: [{
+                            required: true,
+                            message: '请选择发送端',
+                        }]
+                    })(
+                        <Select>
+                            {
+                                mailSendEndList.map((item, idx) => {
+                                    return <Option key={item.id} value={item.id}>{item.name}</Option>
+                                })
+                            }
+                        </Select>
+                    )}
+                </FItem>
                 <FItem label="是否Html">
-                    {getFieldDecorator('IsHtml', { initialValue: data.IsHtml })(
+                    {getFieldDecorator('isHtml', { initialValue: data.isHtml })(
                         <Radio.Group>
                             <Radio value={true}>是</Radio>
                             <Radio value={false}>否</Radio>
-                        </Radio.Group>,
+                        </Radio.Group>
                     )}
                 </FItem>
                 <FItem label="邮件内容">
-                    {getFieldDecorator("MailBody", { initialValue: data.MailBody })(
+                    {getFieldDecorator("mailBody", { initialValue: data.mailBody })(
                         <TextArea autosize={{ minRows: 3, maxRows: 5 }} />
                     )}
 
@@ -109,7 +144,9 @@ const WrappedEditModal = Form.create({ name: 'editModal' })(editModal);
 export default connect(state => {
 
     return {
-        data: state.mailcenter_maillist.CMail
+        data: state.mailcenter_maillist.CMail,
+        mailSendTypeList: state.mailcenter_mailsendtype.MailSendTypeList,
+        mailSendEndList: state.mailcenter_mailsendend.MailSendEndList
     };
 })(WrappedEditModal);
 
