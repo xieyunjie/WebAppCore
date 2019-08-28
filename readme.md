@@ -1,8 +1,8 @@
 ﻿## .net core + ef core + ant design pro Demo
 ### 一个.net core + ef core + ant design pro 的例子
 
-- **WebAppCore.DB**
-    ef core目录，版本为2.2.6，ef core不支持直接生成edmx文件，在使用nuget引用Microsoft.EntityFrameworkCore、Microsoft.EntityFrameworkCore.SqlServer、Microsoft.EntityFrameworkCore.Tools后，运行命令行生成
+- **WebAppCore.DB**  
+  ef core目录，版本为2.2.6，ef core不支持直接生成edmx文件，在使用nuget引用Microsoft.EntityFrameworkCore、Microsoft.EntityFrameworkCore.SqlServer、Microsoft.EntityFrameworkCore.Tools后，运行命令行生成
     ```bash
     Scaffold-DbContext "Data Source=.;Initial Catalog=Blogging;Integrated Security=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
     ```
@@ -12,7 +12,7 @@
     
 &nbsp;
 
-- **WebAppCore.MvcUI**
+- **WebAppCore.MvcUI**  
     .net core目录，版本为2.2.0，几乎所有的配置都在Startup.cs这里，e.g.
     ```C#
     services.AddDbContext<DB.Models.MailCenterContext>(options =>{
@@ -35,13 +35,13 @@
     
 &nbsp;
 
-- **WebAppCore.UI**
+- **WebAppCore.UI**  
     前端目录，使用ant-design pro脚手架、umijs框架，具体可查看这些官网：[dvajs](https://dvajs.com/)、[umijs](https://umijs.org/zh/)、[ant-design](https://ant.design/index-cn)、[ant-design pro](https://pro.ant.design/index-cn/)。
     发布文件后，需要放到 ***WebAppCore.MvcUI*** 的****wwwroot****目录下
     
-    &nbsp;
-    
-- **部署运行**
+&nbsp;
+
+- **部署运行**  
    我使用的是centos，运行以下命令即可安装运行环境
    ```bash
     sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
