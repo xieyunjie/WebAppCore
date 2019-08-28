@@ -1,4 +1,4 @@
-import * as maillistSvc from '@/services/mailcenter/maillist';
+import * as service from '@/services/mailcenter/maillist';
 
 const model = {
 
@@ -33,7 +33,7 @@ const model = {
       call,
       select
     }) {
-      const data = yield call(maillistSvc.GetMailList, {});
+      const data = yield call(service.GetMailList, {});
       return yield put({
         type: 'save',
         payload: {

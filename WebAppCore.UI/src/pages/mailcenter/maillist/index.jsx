@@ -41,7 +41,7 @@ const AppFun = function ({ loading, data, editModalVisible, emptyMail, dispatch 
       key: 'Subject',
       title: '主题',
       dataIndex: 'Subject',
-    },{
+    }, {
       key: 'MailSendEnd.Name',
       title: '发送邮箱',
       dataIndex: 'MailSendEnd.Name',
@@ -112,7 +112,22 @@ const AppFun = function ({ loading, data, editModalVisible, emptyMail, dispatch 
 
 class AppCmp extends Component {
   componentDidMount() {
-    this.props.dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
+    // this.props.dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} }); 
+    const p1 = this.props.dispatch({
+      type: 'mailcenter_maillist/GetMailList',
+      payload: {},
+    }),
+      p2 = this.props.dispatch({
+        type: 'mailcenter_mailsendend/Init',
+        payload: {},
+      }),
+      p3 = this.props.dispatch({
+        type: 'mailcenter_mailsendtype/Init',
+        payload: {},
+      });
+
+    Promise.all([p1, p2, p3]).then(() => {
+    });
   }
   render = () => AppFun(this.props);
 }
