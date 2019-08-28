@@ -9,18 +9,18 @@ const model = {
     CMail: {},
     editModalVisible: false,
     EmptyMail: {
-      id: 0,
-      name: '',
-      displayName: '',
-      subject: '',
-      mailBody: '',
-      isHtml: true,
-      mailSendTypeId: 1,
-      mailSendEndId: 1,
-      status: 1,
-      mailSendEnd: {},
-      mailSendType: {},
-      mcMailReceiveEnd: []
+      Id: 0,
+      Name: '',
+      DisplayName: '',
+      Subject: '',
+      MailBody: '',
+      IsHtml: true,
+      MailSendTypeId: 1,
+      MailSendEndId: 1,
+      Status: 1,
+      MailSendEnd: {},
+      MailSendType: {},
+      McMailReceiveEnd: []
     }
   },
 
@@ -40,6 +40,26 @@ const model = {
           MailList: data
         }
       });
+    },
+    * SaveMailList({
+      payload
+    }, {
+      put,
+      call,
+      select
+    }) {
+      const res = yield call(service.SaveMailList, payload);
+      return res;
+    },
+    * DeleteMailList({
+      payload
+    }, {
+      put,
+      call,
+      select
+    }) {
+      const res = yield call(service.DeleteMailList, payload);
+      return res;
     },
   },
   reducers: {

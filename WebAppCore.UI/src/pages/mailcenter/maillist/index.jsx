@@ -1,6 +1,6 @@
 import { connect } from 'dva';
 import React, { Component } from 'react';
-import { Table, Divider, Tag, Button, Spin } from 'antd';
+import { Table, Divider, Tag, Button, Spin, message, Popconfirm } from 'antd';
 
 import EditModal from './edit'
 
@@ -12,6 +12,17 @@ const AppFun = function ({ loading, data, editModalVisible, emptyMail, dispatch 
   const onEditClick = function (record) {
     dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: record, editModalVisible: true } });
   };
+  const onDeleteClick = function (record) {
+    dispatch({ type: 'mailcenter_maillist/DeleteMailList', payload: { id: record.Id } }).then((res) => {
+      if (res.success === true) { 
+        dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
+        message.success(res.msg);
+      }
+      else {
+        message.error(res.msg);
+      }
+    });
+  };
   const columns = [
     {
       key: 'opr',
@@ -20,44 +31,46 @@ const AppFun = function ({ loading, data, editModalVisible, emptyMail, dispatch 
         <span>
           <Button type="link" size="small" onClick={onEditClick.bind(null, record)}>编辑</Button>
           <Divider type="vertical" />
-          {record.status == true ? (<Button color="blue" size="small">禁用</Button>) : (<Button color="orange" size="small">启用</Button>)}
+          {record.Status == true ? (<Button color="blue" size="small">禁用</Button>) : (<Button color="orange" size="small">启用</Button>)}
           <Divider type="vertical" />
-          <Button type="danger" size="small">删除</Button>
+          <Popconfirm title="是否确认删除此条数据？" onConfirm={onDeleteClick.bind(null, record)}   >
+            <Button type="danger" size="small">删除</Button>
+            </Popconfirm>
         </span>
       )
     }, {
-      key: 'id',
+      key: 'Id',
       title: 'ID',
-      dataIndex: 'id'
+      dataIndex: 'Id'
     }, {
-      key: 'name',
+      key: 'Name',
       title: '名称',
-      dataIndex: 'name',
+      dataIndex: 'Name',
     }, {
-      key: 'displayName',
+      key: 'DisplayName',
       title: '显示名称',
-      dataIndex: 'displayName',
+      dataIndex: 'DsplayName',
     }, {
-      key: 'subject',
+      key: 'Subject',
       title: '主题',
-      dataIndex: 'subject',
+      dataIndex: 'Subject',
     }, {
-      key: 'mailSendEnd.name',
+      key: 'MailSendEnd.Name',
       title: '发送邮箱',
-      dataIndex: 'mailSendEnd.name',
+      dataIndex: 'MailSendEnd.Name',
     }, {
-      key: 'mailSendType.name',
+      key: 'MailSendType.Name',
       title: '发送类型',
-      dataIndex: 'mailSendType.name',
+      dataIndex: 'MailSendType.Name',
     }, {
-      key: 'isHtml',
+      key: 'IsHtml',
       title: '',
-      dataIndex: 'isHtml',
+      dataIndex: 'IsHtml',
       render: (val, record) => (
         <span>
           {val == true ? (<Tag color="blue">√ HTML</Tag>) : (<Tag color="red">× HTML</Tag>)}
           <Divider type="vertical" />
-          {record.status == true ? (<Tag color="blue">启用</Tag>) : (<Tag color="orange">禁用</Tag>)}
+          {record.Status == true ? (<Tag color="blue">启用</Tag>) : (<Tag color="orange">禁用</Tag>)}
         </span>
       )
     }];
@@ -72,27 +85,29 @@ const AppFun = function ({ loading, data, editModalVisible, emptyMail, dispatch 
   const editProps = {
     data: null,
     blnVisible: editModalVisible,
-    onOK: (e) => { 
-      dispatch({ type: 'mailcenter_maillist/save', payload: { editModalVisible: false } });
+    onOK: (mailList) => {
+      dispatch({ type: 'mailcenter_maillist/SaveMailList', payload: mailList }).then((res) => {
+        if (res.success === true) {
+          dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail, editModalVisible: false } });
+          dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
+          message.success(res.msg);
+        }
+        else {
+          message.error(res.msg);
+        }
+      });
     },
-    onCancel: (e) => { 
+    onCancel: (e) => {
       dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail, editModalVisible: false } });
     }
   };
-
-  // let formRef = null;
-
-  // const saveFormRef = form => {
-  //   formRef = form;
-  // };
 
   return (
     <Spin spinning={loading}>
       <Button type="primary" onClick={onAdd}>添加</Button>
       <Button type="primary" onClick={clickFlash} >flash</Button>
-      <Table rowKey="id" columns={columns} dataSource={data}></Table>
+      <Table rowKey="Id" columns={columns} dataSource={data}></Table>
       <EditModal {...editProps}
-      // wrappedComponentRef={saveFormRef}
       ></EditModal>
     </Spin>
   )

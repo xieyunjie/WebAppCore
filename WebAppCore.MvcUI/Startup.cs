@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
 
 namespace WebAppCore.MvcUI
 {
@@ -37,7 +38,14 @@ namespace WebAppCore.MvcUI
                 options.UseSqlServer(Configuration.GetConnectionString("MailCenter"));
             });
              
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2); 
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(opt=>
+                {
+                    opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    opt.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                    opt.SerializerSettings.DateFormatString = "yyyy-MM-dd";
+                }); 
 
         }
 
