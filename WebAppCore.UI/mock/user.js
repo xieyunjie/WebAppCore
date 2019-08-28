@@ -4,7 +4,7 @@ function getFakeCaptcha(req, res) {
 
 export default {
   // 支持值为 Object 和 Array
-  'GET /api/currentUser': {
+  'GET /User/CurrentUser': {
     name: 'Serati Ma',
     avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
     userid: '00000001',
@@ -75,7 +75,7 @@ export default {
       address: 'Sidney No. 1 Lake Park',
     },
   ],
-  'POST /api/login/account': (req, res) => {
+  'POST /User/Login': (req, res) => {
     const { password, userName, type } = req.body;
 
     if (password === 'ant.design' && userName === 'admin') {
