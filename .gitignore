@@ -339,3 +339,5 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 WebAppCore.UI/WebAppCore.UI.code-workspace
+
+/WebAppCore.UI.TS
