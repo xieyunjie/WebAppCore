@@ -26,7 +26,7 @@ export interface ModelType {
 
 const MailListModel: ModelType = {
     namespace: 'mailcenter_maillist',
-    
+
     state: {
         MailList: [],
         CMail: null,
@@ -61,14 +61,15 @@ const MailListModel: ModelType = {
             return res;
         },
         * DeleteMailList({
-            payload
+            payload, callback
         }, {
             put,
             call,
             select
         }) {
             const res = yield call(service.DeleteMailList, payload);
-            return res;
+            if (callback) callback(res);
+            // return res;
         },
     },
     reducers: {
