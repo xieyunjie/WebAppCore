@@ -73,6 +73,7 @@ if (isAntDesignProPreview) {
 }
 
 export default {
+  history: "hash",
   plugins,
   block: {
     // 国内用户可以使用码云
@@ -116,6 +117,12 @@ export default {
               icon: 'smile',
               component: './Welcome',
             },
+            {
+              path: '/mailcenter/maillist',
+              name: 'mailcenter_maillist',
+              icon: 'smile',
+              component: './mailcenter/maillist/index',
+            }, 
             {
               component: './404',
             },
@@ -179,13 +186,15 @@ export default {
     basePath: '/',
   },
   chainWebpack: webpackPlugin,
-  /*
   proxy: {
-    '/server/api/': {
-      target: 'https://preview.pro.ant.design/',
+    '/MC': {
+      target: 'https://localhost:5001/',
+      secure: false,
       changeOrigin: true,
-      pathRewrite: { '^/server': '' },
+      withCredentials: true,
+      pathRewrite: {
+        '^/MC': '',
+      },
     },
   },
-  */
 } as IConfig;
