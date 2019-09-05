@@ -9,6 +9,9 @@ import { Divider, Tag, Button, Spin, message, Popconfirm, Table } from 'antd';
 import './index.less';
 import { MailListType } from './data';
 import { ModelState } from './model';
+
+import { ModelState as MailSendResultState } from '../mailsendresult/model';
+import EditModal, { ModalProps } from "./components/editmodal";
 // import { FormComponentProps } from 'antd/es/form';
 
 interface AppPrpos {
@@ -24,41 +27,43 @@ interface AppState {
 
 /* eslint react/no-multi-comp:0 */
 @connect((
-    { loading, mailcenter_maillist }:
+    { loading, mailcenter_maillist, mailcenter_mailsendresult }:
         {
             loading: { models: { [key: string]: boolean; }; };
-            mailcenter_maillist: ModelState
+            mailcenter_maillist: ModelState,
+            mailcenter_mailsendresult: MailSendResultState,
         }
 ) => ({
     loading: loading.models.mailcenter_maillist,
     data: mailcenter_maillist.MailList,
     editModalVisible: mailcenter_maillist.editModalVisible,
     emptyMail: mailcenter_maillist.EmptyMail,
+    date: mailcenter_mailsendresult.date
 }),
 )
 
 class App extends Component<AppPrpos, AppState>{
     componentDidMount() {
-        this.props.dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
-        // const p1 = this.props.dispatch({
-        //     type: 'mailcenter_maillist/GetMailList',
-        //     payload: {},
-        // }),
-        //     p2 = this.props.dispatch({
-        //         type: 'mailcenter_mailsendend/Init',
-        //         payload: {},
-        //     }),
-        //     p3 = this.props.dispatch({
-        //         type: 'mailcenter_mailsendtype/Init',
-        //         payload: {},
-        //     });
+        //this.props.dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
+        const p1 = this.props.dispatch({
+            type: 'mailcenter_maillist/GetMailList',
+            payload: {},
+        }),
+            p2 = this.props.dispatch({
+                type: 'mailcenter_mailsendend/Init',
+                payload: {},
+            }),
+            p3 = this.props.dispatch({
+                type: 'mailcenter_mailsendtype/Init',
+                payload: {},
+            });
 
-        // Promise.all([p1, p2, p3]).then(() => {
-        // });
+        Promise.all([p1, p2, p3]).then(() => {
+        });
     }
     render() {
-        const { loading, data, editModalVisible, emptyMail, dispatch } = this.props;
-
+        const { loading, data, editModalVisible, emptyMail, dispatch, date } = this.props;
+        console.info(date);
         const onEditClick = function (record: MailListType) {
             dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: record, editModalVisible: true } });
         };
@@ -83,7 +88,7 @@ class App extends Component<AppPrpos, AppState>{
             //     }
             // });
         };
-        const clickFlash = (e:any) => {
+        const clickFlash = (e: any) => {
             dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
         };
         const onAdd = (e: any) => {
@@ -140,13 +145,31 @@ class App extends Component<AppPrpos, AppState>{
                     </span>
                 )
             }];
+        const editProps: ModalProps = {
+            blnVisible: editModalVisible,
+            onOK: (mailList: MailListType) => {
+                const callback = (res: any) => {
+                    if (res.success === true) {
+                        dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail, editModalVisible: false } });
+                        dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
+                        message.success(res.msg);
+                    }
+                    else {
+                        message.error(res.msg);
+                    }
+                }
+                dispatch({ type: 'mailcenter_maillist/SaveMailList', payload: mailList, callback: callback })
+            },
+            onCancel: (e: any) => {
+                dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail, editModalVisible: false } });
+            }
+        };
         return (
             <Spin spinning={loading}>
                 <Button type="primary" onClick={onAdd}>添加</Button>
                 <Button type="primary" onClick={clickFlash} >flash</Button>
                 <Table rowKey="Id" columns={columns} dataSource={data}></Table>
-                 {/*<EditModal {...editProps}
-                ></EditModal> */}
+                {/* <EditModal {...editProps} ></EditModal>  */}
             </Spin>
         )
 

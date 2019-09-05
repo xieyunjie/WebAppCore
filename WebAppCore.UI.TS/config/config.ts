@@ -124,6 +124,12 @@ export default {
               component: './mailcenter/maillist/index',
             }, 
             {
+              path: '/mailcenter/mailsendresult',
+              name: 'mailcenter_mailsendresult',
+              icon: 'smile',
+              component: './mailcenter/mailsendresult/index',
+            },
+            {
               component: './404',
             },
           ],
