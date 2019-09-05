@@ -59,8 +59,7 @@ class App extends Component<AppPrpos, AppState>{
         });
     }
     render() {
-        const { loading, data, editModalVisible, emptyMail, dispatch, date } = this.props;
-        console.info(date);
+        const { loading, data, editModalVisible, emptyMail, dispatch } = this.props;
         const onEditClick = function (record: MailListType) {
             dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: record, editModalVisible: true } });
         };
@@ -166,7 +165,7 @@ class App extends Component<AppPrpos, AppState>{
                 <Button type="primary" onClick={onAdd}>添加</Button>
                 <Button type="primary" onClick={clickFlash} >flash</Button>
                 <Table rowKey="Id" columns={columns} dataSource={data}></Table>
-                {/* <EditModal {...editProps} ></EditModal>  */}
+                <EditModal {...editProps} ></EditModal> 
             </Spin>
         )
 

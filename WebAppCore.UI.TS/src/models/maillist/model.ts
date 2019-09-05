@@ -29,9 +29,35 @@ const MailListModel: ModelType = {
 
     state: {
         MailList: [],
-        CMail: null,
+        CMail: {
+            Id: 0,
+            Name: '',
+            DisplayName: '',
+            Subject: '',
+            MailBody: '',
+            IsHtml: true,
+            MailSendTypeId: 1,
+            MailSendEndId: 1,
+            Status: true,
+            MailSendEnd: {},
+            MailSendType: {},
+            McMailReceiveEnd: []
+        },
         editModalVisible: false,
-        EmptyMail: null
+        EmptyMail: {
+            Id: 0,
+            Name: '',
+            DisplayName: '',
+            Subject: '',
+            MailBody: '',
+            IsHtml: true,
+            MailSendTypeId: 1,
+            MailSendEndId: 1,
+            Status: true,
+            MailSendEnd: {},
+            MailSendType: {},
+            McMailReceiveEnd: []
+        }
     },
     effects: {
 

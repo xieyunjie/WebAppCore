@@ -53,6 +53,7 @@ class EditModal extends Component<ModalMixProps, ModalState>{
 
     render() {
         const { data, mailSendTypeList, mailSendEndList, blnVisible, onOK, onCancel, form } = this.props;
+        console.info(data);
         //const { modalVisible } = this.state;
         const { getFieldDecorator } = form;
         const formItemLayout = {
