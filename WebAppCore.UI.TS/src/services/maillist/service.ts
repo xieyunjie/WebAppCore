@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-import { MailListType } from './data'
+import { MailListType } from '@/models/maillist/data'
 
 // const MC_Root = process.env.MC_ROOT;
 

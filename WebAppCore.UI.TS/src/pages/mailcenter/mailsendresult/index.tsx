@@ -1,7 +1,7 @@
 import React, { Component, Dispatch } from 'react';
 import { connect } from 'dva'; 
 
-import { ModelState } from './model';
+import { ModelState } from '@/models/mailsendresult/model';
 
 interface AppPrpos {
     result: number,

@@ -7,10 +7,9 @@ import { Divider, Tag, Button, Spin, message, Popconfirm, Table } from 'antd';
 
 
 import './index.less';
-import { MailListType } from './data';
-import { ModelState } from './model';
-
-import { ModelState as MailSendResultState } from '../mailsendresult/model';
+import { MailListType } from '@/models/maillist/data';
+import { ModelState } from '@/models/maillist/model';
+ 
 import EditModal, { ModalProps } from "./components/editmodal";
 // import { FormComponentProps } from 'antd/es/form';
 
@@ -27,18 +26,16 @@ interface AppState {
 
 /* eslint react/no-multi-comp:0 */
 @connect((
-    { loading, mailcenter_maillist, mailcenter_mailsendresult }:
+    { loading, mailcenter_maillist }:
         {
             loading: { models: { [key: string]: boolean; }; };
-            mailcenter_maillist: ModelState,
-            mailcenter_mailsendresult: MailSendResultState,
+            mailcenter_maillist: ModelState 
         }
 ) => ({
     loading: loading.models.mailcenter_maillist,
     data: mailcenter_maillist.MailList,
     editModalVisible: mailcenter_maillist.editModalVisible,
-    emptyMail: mailcenter_maillist.EmptyMail,
-    date: mailcenter_mailsendresult.date
+    emptyMail: mailcenter_maillist.EmptyMail 
 }),
 )
 

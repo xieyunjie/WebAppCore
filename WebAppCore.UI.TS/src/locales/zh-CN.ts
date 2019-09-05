@@ -20,5 +20,7 @@ export default {
   ...pwa,
   ...component,
 
-  'menu.mailcenter_maillist': '邮件表'
+  'menu.mailcenter_maillist': '邮件表',
+
+  'menu.mailcenter_mailsendresult': '已发送邮件'
 };

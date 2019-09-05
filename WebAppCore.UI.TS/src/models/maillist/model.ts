@@ -2,7 +2,7 @@ import { MailListType } from "./data";
 import { Effect } from "dva";
 import { Reducer } from "redux";
 
-import * as service from './service';
+import * as service from '@/services/maillist/service';
 
 export interface ModelState {
     MailList: MailListType[],

@@ -1,28 +1,29 @@
-import { MailSendEndType } from "./data";
+import { MailSendTypeType } from "./data";
 import { Effect } from "dva";
 import { Reducer } from "redux";
 
-import * as service from './service';
+import * as service from '@/services/mailsendtype/service';
 
 export interface ModelState {
-    MailSendEndList: MailSendEndType[]
+    MailSendTypeList: MailSendTypeType[]
 }
 export interface ModelType {
-    namespace: 'mailcenter_mailsendend';
+    namespace: 'mailcenter_mailsendtype';
     state: ModelState;
     effects: {
-        Init: Effect; 
+        Init: Effect;
     };
     reducers: {
         save: Reducer<ModelState>;
     }
 }
 
-const MailSendEndModel: ModelType = {
-    namespace: 'mailcenter_mailsendend',
-    
+const MailSendTypeModel: ModelType= {
+
+    namespace: 'mailcenter_mailsendtype',
+
     state: {
-        MailSendEndList: []
+        MailSendTypeList: []
     },
     effects: {
 
@@ -33,11 +34,11 @@ const MailSendEndModel: ModelType = {
             call,
             select
         }) {
-            const data = yield call(service.GetMailSendEndList, {});
+            const data = yield call(service.GetMailSendTypeList, {});
             return yield put({
                 type: 'save',
                 payload: {
-                    MailSendEndList: data
+                    MailSendTypeList: data
                 }
             });
         },
@@ -50,6 +51,7 @@ const MailSendEndModel: ModelType = {
             };
         },
     }
+
 }
 
-export default MailSendEndModel;
+export default MailSendTypeModel;
