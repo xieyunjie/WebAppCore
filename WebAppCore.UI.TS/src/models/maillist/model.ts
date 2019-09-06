@@ -3,6 +3,7 @@ import { Effect } from "dva";
 import { Reducer } from "redux";
 
 import * as service from '@/services/maillist/service';
+import { callbackify } from "util";
 
 export interface ModelState {
     MailList: MailListType[],
@@ -77,13 +78,17 @@ const MailListModel: ModelType = {
             });
         },
         * SaveMailList({
-            payload
+            payload,
+            callback
         }, {
             put,
             call,
             select
         }) {
             const res = yield call(service.SaveMailList, payload);
+            if (callback) {
+                callback(res); 
+            }
             return res;
         },
         * DeleteMailList({
