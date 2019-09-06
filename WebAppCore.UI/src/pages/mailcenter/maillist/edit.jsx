@@ -36,10 +36,9 @@ const editModal = ({ data, mailSendTypeList, mailSendEndList, blnVisible, onOK, 
         form.validateFields((err, fieldsValue) => {
             if (err) {
                 return;
-            }
-
-             
-            const v = { ...data, ...fieldsValue, mailSendType: null, mailSendEnd: null };
+            }  
+            
+            const v = { ...data, ...fieldsValue, MailSendType: null, MailSendEnd: null }; 
             onOK(v);
         });
     };
@@ -97,8 +96,8 @@ const editModal = ({ data, mailSendTypeList, mailSendEndList, blnVisible, onOK, 
                     )}
                 </FItem>
                 <FItem label="发送端">
-                    {getFieldDecorator('MailSendTypeId', {
-                        initialValue: data.MailSendTypeId,
+                    {getFieldDecorator('MailSendEndId', {
+                        initialValue: data.MailSendEndId,
                         rules: [{
                             required: true,
                             message: '请选择发送端',
