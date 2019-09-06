@@ -185,7 +185,7 @@ class EditModal extends Component<ModalMixProps, ModalState>{
                     <FItem {...tailFormItemLayout}>
                         <Button type="primary" htmlType="submit">
                             保存</Button>
-                        <Button type="link" onClick={onCancel} >
+                        <Button type="link" onClick={handlerCancel} >
                             取消</Button>
                     </FItem>
                 </Form>

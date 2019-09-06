@@ -54,15 +54,15 @@ const request = extend({
 });
 
 // request拦截器, 改变url 或 options.
-request.interceptors.request.use((url, options) => {
-  console.info(url);
-  console.info(options);
-  return (
-    {
-      url,
-      options,
-    }
-  );
-});
+// request.interceptors.request.use((url, options) => {
+//   console.info(url);
+//   console.info(options);
+//   return (
+//     {
+//       url,
+//       options,
+//     }
+//   );
+// });
 
 export default request;
