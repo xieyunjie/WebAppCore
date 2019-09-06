@@ -194,7 +194,8 @@ export default {
   chainWebpack: webpackPlugin,
   proxy: {
     '/MC': {
-      target: 'http://192.168.136.132:5000/',
+      // target: 'http://192.168.136.132:5000/',
+      target: 'https://localhost:5001/',
       secure: false,
       changeOrigin: true,
       withCredentials: true,

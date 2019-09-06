@@ -2,13 +2,12 @@ import { MailListType } from "./data";
 import { Effect } from "dva";
 import { Reducer } from "redux";
 
-import * as service from '@/services/maillist/service';
-import { callbackify } from "util";
+import * as service from '@/services/maillist/service';  
 
 export interface ModelState {
     MailList: MailListType[],
     CMail: MailListType | null,
-    editModalVisible: boolean,
+    //editModalVisible: boolean,
     EmptyMail: MailListType | null
 }
 
@@ -39,12 +38,12 @@ const MailListModel: ModelType = {
             IsHtml: true,
             MailSendTypeId: 1,
             MailSendEndId: 1,
-            Status: true,
-            MailSendEnd: {},
-            MailSendType: {},
+            Status: 1,
+            MailSendEnd: null,
+            MailSendType: null,
             McMailReceiveEnd: []
         },
-        editModalVisible: false,
+        //editModalVisible: false,
         EmptyMail: {
             Id: 0,
             Name: '',
@@ -54,9 +53,9 @@ const MailListModel: ModelType = {
             IsHtml: true,
             MailSendTypeId: 1,
             MailSendEndId: 1,
-            Status: true,
-            MailSendEnd: {},
-            MailSendType: {},
+            Status: 1,
+            MailSendEnd: null,
+            MailSendType: null,
             McMailReceiveEnd: []
         }
     },

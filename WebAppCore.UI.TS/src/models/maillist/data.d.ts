@@ -1,5 +1,5 @@
-import { MailSendTypeType } from '@/pages/mailcenter/mailsendtype/data';
-import { MailSendEndType } from "@/pages/mailcenter/mailsendend/data";
+import { MailSendTypeType } from '../mailsendtype/data';
+import { MailSendEndType } from '../mailsendend/data';
 
 
 export interface MailListType{
@@ -11,8 +11,8 @@ export interface MailListType{
     IsHtml: boolean;
     MailSendTypeId: number;
     MailSendEndId: number;
-    Status: boolean;
-    MailSendEnd?: MailSendEndType
-    MailSendType?: MailSendEndType,
+    Status: number;
+    MailSendEnd?: MailSendEndType | null;
+    MailSendType?: MailSendEndType | null;
     McMailReceiveEnd?: []
 }

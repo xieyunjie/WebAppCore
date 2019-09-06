@@ -16,12 +16,13 @@ import EditModal, { ModalProps } from "./components/editmodal";
 interface AppPrpos {
     loading: boolean;
     data: MailListType[];
-    editModalVisible: boolean;
+    // editModalVisible: boolean;
     emptyMail: MailListType;
     dispatch: Dispatch<any>;
 }
 interface AppState {
     modalVisible: boolean;
+    CMail: MailListType
 }
 
 /* eslint react/no-multi-comp:0 */
@@ -34,12 +35,16 @@ interface AppState {
 ) => ({
     loading: loading.models.mailcenter_maillist,
     data: mailcenter_maillist.MailList,
-    editModalVisible: mailcenter_maillist.editModalVisible,
+    //editModalVisible: mailcenter_maillist.editModalVisible,
     emptyMail: mailcenter_maillist.EmptyMail 
 }),
 )
 
 class App extends Component<AppPrpos, AppState>{
+    state: AppState = {
+        modalVisible: false,
+        CMail: this.props.emptyMail
+    }
     componentDidMount() {
         //this.props.dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
         const p1 = this.props.dispatch({
@@ -59,10 +64,25 @@ class App extends Component<AppPrpos, AppState>{
         });
     }
     render() {
-        const { loading, data, editModalVisible, emptyMail, dispatch } = this.props;
-        const onEditClick = function (record: MailListType) {
-            dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: record, editModalVisible: true } });
-        };
+        //const { loading, data, editModalVisible, emptyMail, dispatch } = this.props;
+        const { loading, data, emptyMail, dispatch } = this.props;
+
+        // const onEditClick = function (record: MailListType) {
+        //     // dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: record, editModalVisible: true } });
+        //     // this.setState({
+        //     //     CMail: record,
+        //     //     modalVisible:true
+        //     // })
+        // };  
+
+        const onEditClick = (record: MailListType) => {
+            // console.info(record);
+            // dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: record, editModalVisible: true } });
+            this.setState({
+                CMail: { ...record },
+                modalVisible:true
+            })
+        };  
         const onDeleteClick = function (record: MailListType) {
             const callback = function (res: any) {
                 if (res.success === true) {
@@ -73,22 +93,18 @@ class App extends Component<AppPrpos, AppState>{
                     message.error(res.msg);
                 }
             }
-            dispatch({ type: 'mailcenter_maillist/DeleteMailList', payload: { id: record.Id }, callback: callback });
-            // dispatch({ type: 'mailcenter_maillist/DeleteMailList', payload: { id: record.Id } }).then((res) => {
-            //     if (res.success === true) {
-            //         dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
-            //         message.success(res.msg);
-            //     }
-            //     else {
-            //         message.error(res.msg);
-            //     }
-            // });
+            dispatch({ type: 'mailcenter_maillist/DeleteMailList', payload: { id: record.Id }, callback: callback }); 
         };
         const clickFlash = (e: any) => {
             dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
         };
         const onAdd = (e: any) => {
-            dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail, editModalVisible: true } });
+            // dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail, editModalVisible: true } });
+            //dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail } });
+            this.setState({
+                CMail: { ...emptyMail },
+                modalVisible: true
+            })
         };
         const columns = [
             {
@@ -98,7 +114,7 @@ class App extends Component<AppPrpos, AppState>{
                     <span>
                         <Button type="link" size="small" onClick={onEditClick.bind(null, record)}>编辑</Button>
                         <Divider type="vertical" />
-                        {record.Status == true ? (<Button color="blue" size="small">禁用</Button>) : (<Button color="orange" size="small">启用</Button>)}
+                        {record.Status == 1 ? (<Button color="blue" size="small">禁用</Button>) : (<Button color="orange" size="small">启用</Button>)}
                         <Divider type="vertical" />
                         <Popconfirm title="是否确认删除此条数据？" onConfirm={onDeleteClick.bind(null, record)}   >
                             <Button type="danger" size="small">删除</Button>
@@ -137,16 +153,21 @@ class App extends Component<AppPrpos, AppState>{
                     <span>
                         {val == true ? (<Tag color="blue">√ HTML</Tag>) : (<Tag color="red">× HTML</Tag>)}
                         <Divider type="vertical" />
-                        {record.Status == true ? (<Tag color="blue">启用</Tag>) : (<Tag color="orange">禁用</Tag>)}
+                        {record.Status == 1 ? (<Tag color="blue">启用</Tag>) : (<Tag color="orange">禁用</Tag>)}
                     </span>
                 )
             }];
         const editProps: ModalProps = {
-            blnVisible: editModalVisible,
+            data:this.state.CMail,
+            blnVisible: this.state.modalVisible,
             onOK: (mailList: MailListType) => {
                 const callback = (res: any) => {
                     if (res.success === true) {
-                        dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail, editModalVisible: false } });
+                        // dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail, editModalVisible: false } });
+                        this.setState({
+                            CMail: emptyMail,
+                            modalVisible: false
+                        })
                         dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
                         message.success(res.msg);
                     }
@@ -157,7 +178,11 @@ class App extends Component<AppPrpos, AppState>{
                 dispatch({ type: 'mailcenter_maillist/SaveMailList', payload: mailList, callback: callback })
             },
             onCancel: (e: any) => {
-                dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail, editModalVisible: false } });
+                //dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail, editModalVisible: false } });
+                this.setState({
+                    CMail: { ...emptyMail },
+                    modalVisible: false
+                })
             }
         };
         return (

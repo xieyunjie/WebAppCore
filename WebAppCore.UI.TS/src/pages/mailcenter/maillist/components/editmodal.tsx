@@ -1,13 +1,13 @@
 import { connect } from 'dva';
 import React, { Component } from 'react';
 import { Modal, Form, Input, Button, Radio, Select } from 'antd';
-import { MailListType } from '../data';
+import { MailListType } from '@/models/maillist/data';
 import { FormComponentProps } from 'antd/es/form';
-import { MailSendTypeType } from '../../mailsendtype/data';
-import { MailSendEndType } from '../../mailsendend/data';
-import { ModelState as MailListState } from '../model';
-import { ModelState as MailSendEndState } from '../../mailsendend/model';
-import { ModelState as MailSendTypeState } from '../../mailsendtype/model';
+import { MailSendTypeType } from '@/models/mailsendtype/data';
+import { MailSendEndType } from '@/models/mailsendend/data';
+// import { ModelState as MailListState } from '@/models/maillist/model';
+import { ModelState as MailSendEndState } from '@/models/mailsendend/model';
+import { ModelState as MailSendTypeState } from '@/models/mailsendtype/model';
 
 
 const FItem = Form.Item;
@@ -15,7 +15,7 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 export interface ModalProps {
-
+    data: MailListType;
     blnVisible: boolean;
     onOK: (v: MailListType) => void;
     onCancel: (e: any) => void
@@ -23,12 +23,12 @@ export interface ModalProps {
 
 export interface ModalMixProps extends ModalProps, FormComponentProps {
 
-    data: MailListType;
+    
     mailSendTypeList: MailSendTypeType[];
     mailSendEndList: MailSendEndType[];
     blnVisible: boolean;
     onOK: (v: MailListType) => void;
-    onCancel: () => void
+    onCancel: (e:any) => void
 
 }
 export interface ModalState {
@@ -36,14 +36,15 @@ export interface ModalState {
 }
 
 @connect((
-    { mailcenter_maillist, mailcenter_mailsendend, mailcenter_mailsendtype, }:
+    { //mailcenter_maillist,
+        mailcenter_mailsendend, mailcenter_mailsendtype, }:
         {
-            mailcenter_maillist: MailListState,
+            //mailcenter_maillist: MailListState,
             mailcenter_mailsendend: MailSendEndState,
             mailcenter_mailsendtype: MailSendTypeState,
         }
 ) => ({
-    data: mailcenter_maillist.CMail,
+    //data: mailcenter_maillist.CMail,
     mailSendEndList: mailcenter_mailsendend.MailSendEndList,
     mailSendTypeList: mailcenter_mailsendtype.MailSendTypeList,
 }),
@@ -75,7 +76,7 @@ class EditModal extends Component<ModalMixProps, ModalState>{
                 sm: {
                     span: 16,
                     offset: 8,
-                },
+                }, 
             },
         };
         const handleSubmit = (e: any) => {
@@ -85,17 +86,24 @@ class EditModal extends Component<ModalMixProps, ModalState>{
                 if (err) {
                     return;
                 }
-                const v: MailListType = { ...data, ...fieldsValue, mailSendType: null, mailSendEnd: null };
+                const v: MailListType = { ...data, ...fieldsValue };
+                
                 onOK(v);
             });
         };
+        // console.info(data);
+
+        const handlerCancel = (e: any) => {
+            form.resetFields();
+            onCancel(e)
+        }
 
         return (
             <Modal
                 title="编辑Modal"
                 visible={blnVisible}
                 okText="保存"
-                onCancel={onCancel}
+                onCancel={handlerCancel}
                 footer={null}
             >
                 <Form {...formItemLayout} onSubmit={handleSubmit}>
@@ -144,8 +152,8 @@ class EditModal extends Component<ModalMixProps, ModalState>{
                         )}
                     </FItem>
                     <FItem label="发送端">
-                        {getFieldDecorator('MailSendTypeId', {
-                            initialValue: data.MailSendTypeId,
+                        {getFieldDecorator('MailSendEndId', {
+                            initialValue: data.MailSendEndId,
                             rules: [{
                                 required: true,
                                 message: '请选择发送端',

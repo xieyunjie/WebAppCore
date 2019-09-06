@@ -21,7 +21,7 @@
       "nativeDebugging": false
     },
     "WebAppCore.MvcUI": {
-      "commandName": "IIS",
+      "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
