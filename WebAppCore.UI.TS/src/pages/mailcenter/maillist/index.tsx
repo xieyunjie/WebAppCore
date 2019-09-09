@@ -77,7 +77,7 @@ class App extends Component<AppPrpos, AppState>{
 
         const onEditClick = (record: MailListType) => {
             // console.info(record);
-            // dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: record, editModalVisible: true } });
+            // dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: record, editModalVisible: true } }); 
             this.setState({
                 CMail: { ...record },
                 modalVisible:true
@@ -132,7 +132,7 @@ class App extends Component<AppPrpos, AppState>{
             }, {
                 key: 'DisplayName',
                 title: '显示名称',
-                dataIndex: 'DsplayName',
+                dataIndex: 'DisplayName',
             }, {
                 key: 'Subject',
                 title: '主题',

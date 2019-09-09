@@ -86,7 +86,7 @@ class EditModal extends Component<ModalMixProps, ModalState>{
                 if (err) {
                     return;
                 }
-                const v: MailListType = { ...data, ...fieldsValue };
+                const v: MailListType = { ...data, ...fieldsValue, MailSendEnd: null, MailSendType:null }; 
                 
                 onOK(v);
             });

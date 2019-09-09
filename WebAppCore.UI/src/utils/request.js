@@ -4,6 +4,25 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import qs from 'querystring';
+
+const setUrlEncoded = obj => {
+  let urlEncoded = '';
+  if (obj && obj instanceof Object) {
+    urlEncoded = qs.stringify(obj)
+    // const keys = Object.keys(obj);
+    // if (keys && keys.length) {
+    //   keys.forEach((key, index) => {
+    //     urlEncoded += `${key}=${obj[key]}`;
+    //     if (index + 1 < keys.length) {
+    //       urlEncoded += '&';
+    //     }
+    //   });
+    // }
+  }
+  return urlEncoded;
+};
+
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -53,4 +72,16 @@ const request = extend({
   // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
 });
+
+// request.interceptors.request.use((url, options) => { 
+//   if (options.data) {
+//     options.body = setUrlEncoded(options.data); 
+//     console.info(options);
+//   }
+  
+//   return ({
+//         url,options
+//   });
+// });
+
 export default request;
