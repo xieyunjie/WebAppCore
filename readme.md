@@ -58,3 +58,29 @@
    ```bash
     dotnet WebAppCore.MvcUI.dll  //这里是Mvc项目的DLL名称
    ```
+
+&nbsp;
+
+- **关于request.js的说明**  
+    ant-design pro使用的是umi-request模块作为请求模块，在POST数据且数据的属性存在null时，提交的数据会缺少【=】号  
+    例如
+    ```js
+    data: {
+        DisplayName: 2,
+        Id: 0,
+        IsHtml: true,
+        MailBody: 123,
+        MailSendEndId: 1,
+        MailSendTypeId: 1,
+        Name: 1,
+        Status: 1,
+        Subject: 3,
+        MailSendEnd: null,
+        MailSendType: null,
+    },
+    ```
+    会解释成：
+    ```
+    DisplayName=2&Id=0&IsHtml=true&MailBody=123&MailSendEnd&MailSendEndId=1&MailSendType&MailSendTypeId=1&Name=1&Status=1&Subject=1
+    ```
+    可能会导致服务端把MailSendEnd&MailSendEndId=1和MailSendType&MailSendTypeId=1解释成两个字段，从而出错。现把JS和TS两前端的request.js进行了重写。
