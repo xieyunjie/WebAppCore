@@ -1,9 +1,26 @@
-/**
- * request 网络请求工具
- * 更详细的 api 文档: https://github.com/umijs/umi-request
- */
-import { extend } from 'umi-request';
-import { notification } from 'antd';
+import fetch from 'dva/fetch';
+import {
+  notification
+} from 'antd';
+import qs from 'querystring';
+
+
+const setUrlEncoded = (obj:any) => {
+  let urlEncoded = '';
+  if (obj && obj instanceof Object) {
+    urlEncoded = qs.stringify(obj)
+    // const keys = Object.keys(obj);
+    // if (keys && keys.length) {
+    //   keys.forEach((key, index) => {
+    //     urlEncoded += `${key}=${obj[key]}`;
+    //     if (index + 1 < keys.length) {
+    //       urlEncoded += '&';
+    //     }
+    //   });
+    // }
+  }
+  return urlEncoded;
+};
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -23,46 +40,161 @@ const codeMessage = {
   504: '网关超时。',
 };
 
-/**
- * 异常处理程序
- */
-const errorHandler = (error: { response: Response }): Response => {
-  const { response } = error;
-  if (response && response.status) {
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
-
-    notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
-    });
-  } else if (!response) {
-    notification.error({
-      description: '您的网络发生异常，无法连接服务器',
-      message: '网络异常',
-    });
+function checkStatus(response:any) {
+  if (response.status >= 200 && response.status < 300) {
+    return response;
   }
-  return response;
-};
+  const errorText = codeMessage[response.status] || response.statusText;
+  //Toast.fail(errorText, 1);
+  notification.error({
+    message: `请求错误 ${response.status}: ${response.url}`,
+    description: errorText,
+  });
+  const error = new Error(errorText);
+ // error.code = response.status;
+  // error.response = response;
+  throw error;
+}
 
 /**
- * 配置request请求时的默认参数
+ * Requests a URL, returning a promise.
+ *
+ * @param  {string} url       The URL we want to request
+ * @param  {object} [options] The options we want to pass to "fetch"
+ * @return {object}           An object containing either "data" or "err"
  */
-const request = extend({
-  errorHandler, // 默认错误处理
-  credentials: 'include', // 默认请求是否带上cookie
-});
+function request(url: string, options: any = {}) {
+  const defaultOptions = {};
+  const newOptions = {
+    method: 'GET',
+    ...defaultOptions,
+    ...options
+  };
 
-// request拦截器, 改变url 或 options.
-// request.interceptors.request.use((url, options) => {
-//   console.info(url);
-//   console.info(options);
-//   return (
-//     {
-//       url,
-//       options,
-//     }
-//   );
-// });
+  if (
+    newOptions.method === 'POST' ||
+    newOptions.method === 'PUT' ||
+    newOptions.method === 'DELETE'
+  ) {
+    if (newOptions.requestType === 'json') {
+      newOptions.headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        ...newOptions.headers,
+      };
+      newOptions.body = JSON.stringify(newOptions.data);
+    }
+    else if (newOptions.requestType === 'formData') {
+    }
+    else {
+      newOptions.headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        ...newOptions.headers,
+      };
+      if (newOptions.data != undefined) {
+
+        newOptions.body = setUrlEncoded(newOptions.data);
+      }
+    }
+  }
+  else if (newOptions.method === 'GET') {
+
+    if (newOptions.data != undefined) {
+      url = url + '?' + setUrlEncoded(newOptions.data);
+    }
+  }
+  return fetch(url, newOptions)
+    .then(checkStatus)
+    .then(response => {
+      return response.json(); // 返回响
+    });
+}
+
+// /**
+//  *  the proxy of request
+//  * @param url
+//  * @param options
+//  * @returns {*}
+//  */
+// function proxyRequest(url:string, options:any, showmsg:boolean = false) {
+//   options = options || {};
+
+//   //Toast.loading(null, 60);
+//   return request(url, options)
+//     .then(resData => {
+//       return resData;
+//     })
+//     .catch((reason:any) => {
+//       //console.log(e,'errrr')
+//       const status = reason.code;
+//       if (status === 401) {
+//         return;
+//       } else if (status === 403) {
+//         // router.push('/login');
+//         return;
+//       } else if (status <= 504 && status >= 500) {
+//         // router.push('/login');
+//         return;
+//       } else if (status >= 404 && status < 422) {
+//         // router.push('/404');
+//         return;
+//       }
+//     });
+// }
+
+// // Mix 请求去除所有提示，用于合并请求使用
+// function proxyMixRequest(url:string, options:any) {
+//   options = options || {};
+
+//   return request(url, options)
+//     .then(resData => {
+//       if (resData.success === true) {
+//         return resData || {};
+//       }
+//       const e = new Error();
+//       //e.code = 9000;
+//       e.message = resData.exMessage;
+//       throw e;
+//     })
+//     .catch((reason:any) => {
+//       //console.log(e,'errrr') 
+//       return;
+//     });
+// }
+// proxyRequest.mix = (url, data, method, options) => {
+//   options = options || {};
+//   options.body = data || {};
+//   options.method = method;
+//   return proxyMixRequest(url, options);
+// };
+
+// proxyRequest.get = (url, data, options, showmsg) => {
+//   options = options || {};
+//   options.body = data || {};
+//   options.method = 'GET';
+//   return proxyRequest(url, options, showmsg);
+// };
+
+// proxyRequest.post = (url, data, options, showmsg) => {
+//   options = options || {};
+//   options.body = data || {};
+//   options.method = 'POST';
+//   return proxyRequest(url, options, showmsg);
+// };
+
+// proxyRequest.put = (url, data, options) => {
+//   options = options || {};
+//   options.body = data || {};
+//   options.method = 'PUT';
+//   return proxyRequest(url, options);
+// };
+
+// proxyRequest.delete = (url, data, options) => {
+//   options = options || {};
+//   options.body = data || {};
+//   options.method = 'DELETE';
+//   return proxyRequest(url, options);
+// };
 
 export default request;

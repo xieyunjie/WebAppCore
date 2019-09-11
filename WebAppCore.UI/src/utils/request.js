@@ -102,7 +102,7 @@ function request(url, options) {
 
     if (newOptions.data != undefined)
     {
-      nUrl = url + '?' + setUrlEncoded(newOptions.data);
+      url = url + '?' + setUrlEncoded(newOptions.data);
     } 
   }  
   return fetch(url, newOptions)

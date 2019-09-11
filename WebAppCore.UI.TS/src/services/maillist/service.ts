@@ -13,20 +13,20 @@ export async function SaveMailList(params: MailListType) {
     console.info(params);
     return request(`${MC_Root}/MailList/Save`, {
         method: 'POST',
-        //data: params,
-        data: {
-            DisplayName: 2,
-            Id: 0,
-            IsHtml: true,
-            MailBody: 123,
-            MailSendEndId: 1,
-            MailSendTypeId: 1,
-            Name: 1,
-            Status: 1,
-            Subject: 3,
-            MailSendEnd: null,
-            MailSendType: null,
-        },
+        data: params,
+        // data: {
+        //     DisplayName: 2,
+        //     Id: 0,
+        //     IsHtml: true,
+        //     MailBody: 123,
+        //     MailSendEndId: 1,
+        //     MailSendTypeId: 1,
+        //     Name: 1,
+        //     Status: 1,
+        //     Subject: 3,
+        //     MailSendEnd: null,
+        //     MailSendType: null,
+        // },
         requestType: 'form',
     });
 };
