@@ -49,7 +49,7 @@ const AppFun = function ({ loading, data, editModalVisible, emptyMail, dispatch 
     }, {
       key: 'DisplayName',
       title: '显示名称',
-      dataIndex: 'DsplayName',
+      dataIndex: 'DisplayName',
     }, {
       key: 'Subject',
       title: '主题',
