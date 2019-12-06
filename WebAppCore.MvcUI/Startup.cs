@@ -29,14 +29,17 @@ namespace WebAppCore.MvcUI
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                // options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
             services.AddDbContext<DB.Models.MailCenterContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("MailCenter"));
-            });
+            }, ServiceLifetime.Scoped);
+
+            
              
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
@@ -45,7 +48,9 @@ namespace WebAppCore.MvcUI
                     opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                     opt.SerializerSettings.ContractResolver = new DefaultContractResolver();
                     opt.SerializerSettings.DateFormatString = "yyyy-MM-dd";
-                }); 
+                });
+            services.AddHttpContextAccessor();
+            services.AddTransient<Tenant.ITenantProvider, Tenant.TenantProvider>();
 
         }
 

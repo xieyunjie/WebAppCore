@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppCore.DB", "WebAppCore
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppCore.MvcUI", "WebAppCore.MvcUI\WebAppCore.MvcUI.csproj", "{23B0705B-2687-494D-99B8-1212ECE48BC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppCore.Tenant", "WebAppCore.Tenant\WebAppCore.Tenant.csproj", "{B39EBFBB-B243-4A4B-9A2B-7FB75BC397D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{23B0705B-2687-494D-99B8-1212ECE48BC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23B0705B-2687-494D-99B8-1212ECE48BC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23B0705B-2687-494D-99B8-1212ECE48BC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B39EBFBB-B243-4A4B-9A2B-7FB75BC397D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B39EBFBB-B243-4A4B-9A2B-7FB75BC397D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B39EBFBB-B243-4A4B-9A2B-7FB75BC397D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B39EBFBB-B243-4A4B-9A2B-7FB75BC397D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

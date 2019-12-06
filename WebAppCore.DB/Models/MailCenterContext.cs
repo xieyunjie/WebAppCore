@@ -1,18 +1,21 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using WebAppCore.Tenant;
 
 namespace WebAppCore.DB.Models
 {
     public partial class MailCenterContext : DbContext
     {
+        string _mailsendtypeid;
         public MailCenterContext()
         {
         }
 
-        public MailCenterContext(DbContextOptions<MailCenterContext> options)
+        public MailCenterContext(DbContextOptions<MailCenterContext> options, ITenantProvider tenantProvider)
             : base(options)
         {
+            this._mailsendtypeid = tenantProvider.GetTenantId();
         }
 
         public virtual DbSet<McMailList> McMailList { get; set; }
@@ -25,14 +28,16 @@ namespace WebAppCore.DB.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-            // #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                // #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Database=MailCenter;Server=.;UID=sa;Password=sa;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            Console.WriteLine(this._mailsendtypeid);
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+
 
             modelBuilder.Entity<McMailList>(entity =>
             {
@@ -78,6 +83,13 @@ namespace WebAppCore.DB.Models
                     .HasForeignKey(d => d.MailSendTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MC_MAILL_MAIL_REF__MC_MAILS2");
+
+                int t;
+                if (int.TryParse(this._mailsendtypeid, out t) == true)
+                {
+                    entity.HasQueryFilter(b => EF.Property<int>(b, "MailSendTypeId") == t);
+                }
+
             });
 
             modelBuilder.Entity<McMailReceiveEnd>(entity =>

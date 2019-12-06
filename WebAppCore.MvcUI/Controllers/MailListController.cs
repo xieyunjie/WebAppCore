@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebAppCore.DB.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace WebAppCore.MvcUI.Controllers
 {
@@ -19,8 +20,16 @@ namespace WebAppCore.MvcUI.Controllers
             this._mailCenterContext = mailCenterContext;
 
         }
-        public IActionResult Index()
+        public IActionResult Index(int? type)
         {
+            if (type.HasValue == false)
+            {
+                type = 0;
+            }
+            //HttpRequest httpContext = HttpContext.Request;
+            string mailsendtypeid = type.ToString();
+            this.Response.Cookies.Append("mailsendtypeid", mailsendtypeid, new Microsoft.AspNetCore.Http.CookieOptions() { IsEssential = true });
+            ViewData["mailsendtypeid"] = mailsendtypeid;
             return View();
         }
 
@@ -32,10 +41,11 @@ namespace WebAppCore.MvcUI.Controllers
             //// settings.MissingMemberHandling = MissingMemberHandling.Ignore;
             //settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             //return new JsonResult(list,settings);
+            Console.WriteLine(this._mailCenterContext.GetHashCode());
             return new JsonResult(list);
         }
 
-       public IActionResult Save(McMailList mailList)
+        public IActionResult Save(McMailList mailList)
         {
             try
             {
@@ -63,7 +73,7 @@ namespace WebAppCore.MvcUI.Controllers
                     success = false,
                     msg = ex.Message
                 });
-            } 
+            }
         }
 
         public IActionResult Delete(int Id)

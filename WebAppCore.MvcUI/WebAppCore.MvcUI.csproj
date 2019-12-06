@@ -17,7 +17,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     
   </ItemGroup>
@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebAppCore.DB\WebAppCore.DB.csproj" />
+    <ProjectReference Include="..\WebAppCore.Tenant\WebAppCore.Tenant.csproj" />
   </ItemGroup>
 
 </Project>
