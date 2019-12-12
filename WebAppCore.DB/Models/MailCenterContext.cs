@@ -1,31 +1,33 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using WebAppCore.Tenant;
+using System.Linq;
 
 namespace WebAppCore.DB.Models
 {
     public partial class MailCenterContext : DbContext
     {
-        string _tenantid;
+        private string _tenantid;
         public string TenantId
         {
             get
             {
                 return this._tenantid;
             }
-        }
-        public MailCenterContext()
-        {
-        }
+        } 
 
         public MailCenterContext(DbContextOptions<MailCenterContext> options, ITenantProvider tenantProvider)
             : base(options)
         {
             this._tenantid = tenantProvider.GetTenantId(); 
         }
-
+        public MailCenterContext()
+        {
+        }
 
 
         public virtual DbSet<McMailList> McMailList { get; set; }
@@ -43,8 +45,7 @@ namespace WebAppCore.DB.Models
             }
             optionsBuilder.ReplaceService<IModelCacheKeyFactory, TenantModelFactory>();
             base.OnConfiguring(optionsBuilder);
-        }
-         
+        } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -248,6 +249,45 @@ namespace WebAppCore.DB.Models
                     .IsUnicode(false);
             });
             base.OnModelCreating(modelBuilder);
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            this.SetEntityTenantid();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        public override int SaveChanges()
+        {
+            this.SetEntityTenantid();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            this.SetEntityTenantid();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            this.SetEntityTenantid();
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        private void SetEntityTenantid()
+        {
+            int t;
+            if (int.TryParse(this._tenantid, out t) == false)
+            {
+                t = 0;
+            } 
+            ChangeTracker.DetectChanges(); 
+            var entities = ChangeTracker.Entries().Where(e => e.State == EntityState.Added && e.Entity.GetType() == typeof(McMailList));
+            foreach (var item in entities)
+            {
+                (item.Entity as McMailList).MailSendTypeId = t;
+            }
         }
     }
 }

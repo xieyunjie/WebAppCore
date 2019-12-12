@@ -10,12 +10,23 @@ namespace WebAppCore.DB
     public class TenantModelCacheKey : ModelCacheKey
     {
         private string _tenantId;
-        public TenantModelCacheKey(DbContext context):base(context)
+        public TenantModelCacheKey(DbContext context) : base(context)
         {
             _tenantId = (context as MailCenterContext)?.TenantId;
         }
 
         protected override bool Equals(ModelCacheKey other)
             => base.Equals(other) && (other as TenantModelCacheKey)?._tenantId == _tenantId;
+
+        public override int GetHashCode()
+        {
+            var hashCode = base.GetHashCode() * 397;
+            if (_tenantId != null)
+            {
+                hashCode ^= _tenantId.GetHashCode();
+            }
+
+            return hashCode;
+        }
     }
 }

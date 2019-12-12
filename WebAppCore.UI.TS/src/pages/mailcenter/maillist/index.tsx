@@ -197,7 +197,7 @@ class App extends Component<AppPrpos, AppState>{
                 <Button type="primary" onClick={onAdd}>添加</Button>
                 <Button type="primary" onClick={clickFlash} >flash</Button> 
                 <Button type="primary" onClick={clickChangeType.bind(null, 1)} >change 1</Button> 
-                <Button type="primary" onClick={clickChangeType.bind(null, 2)} >change 1</Button>
+                <Button type="primary" onClick={clickChangeType.bind(null, 2)} >change 2</Button>
                 <Table rowKey="Id" columns={columns} dataSource={data}></Table>
                 <EditModal {...editProps} ></EditModal> 
             </Spin>
