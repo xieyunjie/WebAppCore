@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using WebAppCore.Tenant;
 
@@ -7,7 +8,14 @@ namespace WebAppCore.DB.Models
 {
     public partial class MailCenterContext : DbContext
     {
-        string _mailsendtypeid;
+        string _tenantid;
+        public string TenantId
+        {
+            get
+            {
+                return this._tenantid;
+            }
+        }
         public MailCenterContext()
         {
         }
@@ -15,8 +23,10 @@ namespace WebAppCore.DB.Models
         public MailCenterContext(DbContextOptions<MailCenterContext> options, ITenantProvider tenantProvider)
             : base(options)
         {
-            this._mailsendtypeid = tenantProvider.GetTenantId();
+            this._tenantid = tenantProvider.GetTenantId(); 
         }
+
+
 
         public virtual DbSet<McMailList> McMailList { get; set; }
         public virtual DbSet<McMailReceiveEnd> McMailReceiveEnd { get; set; }
@@ -31,11 +41,16 @@ namespace WebAppCore.DB.Models
                 // #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Database=MailCenter;Server=.;UID=sa;Password=sa;");
             }
+            optionsBuilder.ReplaceService<IModelCacheKeyFactory, TenantModelFactory>();
+            base.OnConfiguring(optionsBuilder);
         }
+         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            Console.WriteLine(this._mailsendtypeid);
+            
+            //Console.WriteLine(this._mailsendtypeid);
+
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
 
@@ -85,7 +100,7 @@ namespace WebAppCore.DB.Models
                     .HasConstraintName("FK_MC_MAILL_MAIL_REF__MC_MAILS2");
 
                 int t;
-                if (int.TryParse(this._mailsendtypeid, out t) == true)
+                if (int.TryParse(this._tenantid, out t) == true)
                 {
                     entity.HasQueryFilter(b => EF.Property<int>(b, "MailSendTypeId") == t);
                 }
@@ -232,6 +247,7 @@ namespace WebAppCore.DB.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

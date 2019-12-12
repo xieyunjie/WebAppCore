@@ -33,6 +33,22 @@ namespace WebAppCore.MvcUI.Controllers
             return View();
         }
 
+        public IActionResult ChangeType(int? type)
+        {
+            if (type.HasValue == false)
+            {
+                type = 0;
+            }
+            string mailsendtypeid = type.ToString();
+            this.Response.Cookies.Append("mailsendtypeid", mailsendtypeid, new Microsoft.AspNetCore.Http.CookieOptions() { IsEssential = true });
+            return new JsonResult(new
+            {
+                success = true,
+                msg = "切换成功"
+            });
+            
+        }
+
         public IActionResult List()
         {
             var list = this._mailCenterContext.McMailList.Include(x => x.MailSendEnd).Include(x => x.MailSendType);

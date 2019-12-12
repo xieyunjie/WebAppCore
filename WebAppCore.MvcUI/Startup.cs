@@ -37,7 +37,8 @@ namespace WebAppCore.MvcUI
             services.AddDbContext<DB.Models.MailCenterContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("MailCenter"));
-            }, ServiceLifetime.Scoped);
+                //options.UseMemoryCache()
+            });
 
             
              
@@ -50,7 +51,7 @@ namespace WebAppCore.MvcUI
                     opt.SerializerSettings.DateFormatString = "yyyy-MM-dd";
                 });
             services.AddHttpContextAccessor();
-            services.AddTransient<Tenant.ITenantProvider, Tenant.TenantProvider>();
+            services.AddScoped<Tenant.ITenantProvider, Tenant.TenantProvider>();
 
         }
 
