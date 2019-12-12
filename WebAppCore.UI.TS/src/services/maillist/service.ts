@@ -38,3 +38,11 @@ export async function DeleteMailList(params: MailListType) {
         requestType: 'form',
     });
 }
+
+export async function ChangeType(type: number) {
+    return request(`${MC_Root}/MailList/ChangeType`, {
+        method: 'POST',
+        data: {type:type},
+        requestType: 'form',
+    });
+}

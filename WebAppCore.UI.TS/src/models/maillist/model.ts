@@ -18,6 +18,7 @@ export interface ModelType {
         GetMailList: Effect;
         SaveMailList: Effect;
         DeleteMailList: Effect;
+        ChangeType: Effect;
     };
     reducers: {
         save: Reducer<ModelState>;
@@ -98,6 +99,17 @@ const MailListModel: ModelType = {
             select
         }) {
             const res = yield call(service.DeleteMailList, payload);
+            if (callback) callback(res);
+            // return res;
+        },
+        * ChangeType({
+            payload, callback
+        }, {
+            put,
+            call,
+            select
+        }) {
+            const res = yield call(service.ChangeType, payload);
             if (callback) callback(res);
             // return res;
         },

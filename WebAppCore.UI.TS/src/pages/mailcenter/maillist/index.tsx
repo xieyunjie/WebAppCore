@@ -98,6 +98,13 @@ class App extends Component<AppPrpos, AppState>{
         const clickFlash = (e: any) => {
             dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
         };
+        const clickChangeType = function( type: number) {
+            dispatch({
+                type: 'mailcenter_maillist/ChangeType', payload: type, callback: function (res:any) { 
+                    dispatch({ type: 'mailcenter_maillist/GetMailList', payload: {} });
+            } });
+        };
+
         const onAdd = (e: any) => {
             // dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail, editModalVisible: true } });
             //dispatch({ type: 'mailcenter_maillist/save', payload: { CMail: emptyMail } });
@@ -188,7 +195,9 @@ class App extends Component<AppPrpos, AppState>{
         return (
             <Spin spinning={loading}>
                 <Button type="primary" onClick={onAdd}>添加</Button>
-                <Button type="primary" onClick={clickFlash} >flash</Button>
+                <Button type="primary" onClick={clickFlash} >flash</Button> 
+                <Button type="primary" onClick={clickChangeType.bind(null, 1)} >change 1</Button> 
+                <Button type="primary" onClick={clickChangeType.bind(null, 2)} >change 1</Button>
                 <Table rowKey="Id" columns={columns} dataSource={data}></Table>
                 <EditModal {...editProps} ></EditModal> 
             </Spin>
