@@ -12,7 +12,6 @@ namespace WebAppCore.DB.Models
 
         public int Id { get; set; }
         public string Name { get; set; }
-
         [Newtonsoft.Json.JsonIgnore]
         public virtual ICollection<McMailList> McMailList { get; set; }
     }

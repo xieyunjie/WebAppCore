@@ -15,7 +15,7 @@ namespace WebAppCore.DB.Models
         public string DisplayName { get; set; }
         public string Subject { get; set; }
         public string MailBody { get; set; }
-        public bool? IsHtml { get; set; }
+        public bool IsHtml { get; set; }
         public int MailSendTypeId { get; set; }
         public int MailSendEndId { get; set; }
         public int Status { get; set; }

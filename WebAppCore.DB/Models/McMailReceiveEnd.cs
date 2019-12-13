@@ -11,7 +11,7 @@ namespace WebAppCore.DB.Models
         public string Address { get; set; }
         public int? SendType { get; set; }
         public int Status { get; set; }
-
+        [Newtonsoft.Json.JsonIgnore]
         public virtual McMailList Mail { get; set; }
     }
 }

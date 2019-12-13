@@ -51,13 +51,13 @@ namespace WebAppCore.MvcUI.Controllers
 
         public IActionResult List()
         {
-            var list = this._mailCenterContext.McMailList.Include(x => x.MailSendEnd).Include(x => x.MailSendType);
+            var list = this._mailCenterContext.McMailList.Include(x => x.MailSendEnd).Include(x => x.MailSendType).Include(x=>x.McMailReceiveEnd);
             //// var list = this._mailCenterContext.McMailList.ToList();
             //JsonSerializerSettings settings = new JsonSerializerSettings();
             //// settings.MissingMemberHandling = MissingMemberHandling.Ignore;
             //settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             //return new JsonResult(list,settings);
-            Console.WriteLine(this._mailCenterContext.GetHashCode());
+           // Console.WriteLine(this._mailCenterContext.GetHashCode());
             return new JsonResult(list);
         }
 

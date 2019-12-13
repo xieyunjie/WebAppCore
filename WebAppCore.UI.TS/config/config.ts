@@ -195,7 +195,7 @@ export default {
   proxy: {
     '/MC': {
       //target: 'http://192.168.136.132:5000/',
-      target: 'https://localhost:5001/',
+      target: 'http://localhost:5000/',
       secure: false,
       changeOrigin: true,
       withCredentials: true,

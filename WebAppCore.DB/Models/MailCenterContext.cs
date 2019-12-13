@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using WebAppCore.Tenant;
-using System.Linq;
 
 namespace WebAppCore.DB.Models
 {
@@ -18,17 +18,16 @@ namespace WebAppCore.DB.Models
             {
                 return this._tenantid;
             }
-        } 
-
-        public MailCenterContext(DbContextOptions<MailCenterContext> options, ITenantProvider tenantProvider)
-            : base(options)
-        {
-            this._tenantid = tenantProvider.GetTenantId(); 
         }
         public MailCenterContext()
         {
         }
 
+        public MailCenterContext(DbContextOptions<MailCenterContext> options, ITenantProvider tenantProvider)
+            : base(options)
+        {
+            this._tenantid = tenantProvider.GetTenantId();
+        }
 
         public virtual DbSet<McMailList> McMailList { get; set; }
         public virtual DbSet<McMailReceiveEnd> McMailReceiveEnd { get; set; }
@@ -45,16 +44,10 @@ namespace WebAppCore.DB.Models
             }
             optionsBuilder.ReplaceService<IModelCacheKeyFactory, TenantModelFactory>();
             base.OnConfiguring(optionsBuilder);
-        } 
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
-            //Console.WriteLine(this._mailsendtypeid);
-
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
-
-
             modelBuilder.Entity<McMailList>(entity =>
             {
                 entity.ToTable("MC_MailList");
@@ -65,10 +58,6 @@ namespace WebAppCore.DB.Models
                     .IsRequired()
                     .HasMaxLength(500)
                     .IsUnicode(false);
-
-                entity.Property(e => e.IsHtml)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.MailBody).HasColumnType("text");
 
@@ -81,8 +70,6 @@ namespace WebAppCore.DB.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.Property(e => e.Subject)
                     .IsRequired()
                     .HasMaxLength(500)
@@ -92,27 +79,28 @@ namespace WebAppCore.DB.Models
                     .WithMany(p => p.McMailList)
                     .HasForeignKey(d => d.MailSendEndId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_MC_MAILL_MAIL_REF__MC_MAILS3");
+                    .HasConstraintName("FK_MC_MailList_MC_MailSendEnd");
 
                 entity.HasOne(d => d.MailSendType)
                     .WithMany(p => p.McMailList)
                     .HasForeignKey(d => d.MailSendTypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_MC_MAILL_MAIL_REF__MC_MAILS2");
+                    .HasConstraintName("FK_MC_MailList_MC_MailSendType");
 
                 int t;
                 if (int.TryParse(this._tenantid, out t) == true)
                 {
                     entity.HasQueryFilter(b => EF.Property<int>(b, "MailSendTypeId") == t);
                 }
-
             });
 
             modelBuilder.Entity<McMailReceiveEnd>(entity =>
             {
                 entity.ToTable("MC_MailReceiveEnd");
 
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedNever();
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -126,15 +114,11 @@ namespace WebAppCore.DB.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.SendType).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.HasOne(d => d.Mail)
                     .WithMany(p => p.McMailReceiveEnd)
                     .HasForeignKey(d => d.MailId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_MC_MAILR_REEND_REF_MC_MAILL");
+                    .HasConstraintName("FK_MC_MailReceiveEnd_MC_MailList");
             });
 
             modelBuilder.Entity<McMailSendEnd>(entity =>
@@ -163,8 +147,6 @@ namespace WebAppCore.DB.Models
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
-
                 entity.Property(e => e.UserName)
                     .IsRequired()
                     .HasMaxLength(200)
@@ -175,7 +157,9 @@ namespace WebAppCore.DB.Models
             {
                 entity.ToTable("MC_MailSendResult");
 
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .ValueGeneratedNever();
 
                 entity.Property(e => e.Address)
                     .IsRequired()
@@ -207,10 +191,6 @@ namespace WebAppCore.DB.Models
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.Property(e => e.IsHtml)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
-
                 entity.Property(e => e.MailBody).HasColumnType("text");
 
                 entity.Property(e => e.Name)
@@ -224,8 +204,6 @@ namespace WebAppCore.DB.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.SendTime).HasColumnType("datetime");
-
-                entity.Property(e => e.Status).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Subject)
                     .IsRequired()
@@ -248,8 +226,11 @@ namespace WebAppCore.DB.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
-            base.OnModelCreating(modelBuilder);
+
+            OnModelCreatingPartial(modelBuilder);
         }
+
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
@@ -281,8 +262,8 @@ namespace WebAppCore.DB.Models
             if (int.TryParse(this._tenantid, out t) == false)
             {
                 t = 0;
-            } 
-            ChangeTracker.DetectChanges(); 
+            }
+            ChangeTracker.DetectChanges();
             var entities = ChangeTracker.Entries().Where(e => e.State == EntityState.Added && e.Entity.GetType() == typeof(McMailList));
             foreach (var item in entities)
             {
